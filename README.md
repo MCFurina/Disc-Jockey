@@ -1,1 +1,8 @@
-Download the mod at [Modrinth](https://modrinth.com/mod/disc-jockey) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/disc-jockey)
+# 一个脑淤血升版本的DiscJockey Fork 支持1.21.5版本  
+## 优点  
+有生之年终于在1.21.5用上DiscJockey了，也是好起来了，~又可以在服务器里耍音符盒装逼了~  
+## 缺点  
+你**无法**收藏音乐，你**无法**直接拖拽nbs文件进音乐列表  
+你也**无法**点击preview试听音乐  
+*（找AI老祖硬升级的）*  
+# 我希望有生之年能有真正牛逼的开发者创建DiscJockey的Fork，对新版本进行较大适配！这样以前服务器用音符盒演奏音乐的时代又要回来了！  
