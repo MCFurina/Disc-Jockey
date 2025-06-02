@@ -32,7 +32,7 @@ public class DiscJockeyScreen extends Screen {
             PREVIEW = Text.translatable(Main.MOD_ID+".screen.preview"),
             PREVIEW_STOP = Text.translatable(Main.MOD_ID+".screen.preview.stop"),
             DROP_HINT = Text.translatable(Main.MOD_ID+".screen.drop_hint").formatted(Formatting.GRAY)
-    ;
+                    ;
 
     private SongListWidget songListWidget;
     private ButtonWidget playButton, previewButton;
@@ -143,7 +143,7 @@ public class DiscJockeyScreen extends Screen {
 
         if (shouldFilter) {
             shouldFilter = false;
-            songListWidget.setScrollAmount(0);
+            songListWidget.setScrollY(0.0);
             songListWidget.children().clear();
             boolean empty = query.isEmpty();
             int favoriteIndex = 0;
@@ -159,7 +159,6 @@ public class DiscJockeyScreen extends Screen {
         }
     }
 
-    @Override
     public void filesDragged(List<Path> paths) {
         String string = paths.stream().map(Path::getFileName).map(Path::toString).collect(Collectors.joining(", "));
         if (string.length() > 300) string = string.substring(0, 300)+"...";

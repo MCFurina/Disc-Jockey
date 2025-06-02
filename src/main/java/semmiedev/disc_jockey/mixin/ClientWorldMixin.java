@@ -7,6 +7,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.registry.Registries;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,11 +20,31 @@ import semmiedev.disc_jockey.Main;
 public class ClientWorldMixin {
     @Shadow @Final private MinecraftClient client;
 
-    @Inject(method = "playSound(DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FFZJ)V", at = @At("HEAD"), cancellable = true)
-    private void makeNoteBlockSoundsOmnidirectional(double x, double y, double z, SoundEvent event, SoundCategory category, float volume, float pitch, boolean useDistance, long seed, CallbackInfo ci) {
-        if (((Main.config.omnidirectionalNoteBlockSounds && Main.SONG_PLAYER.running) || Main.PREVIEWER.running) && event.getId().getPath().startsWith("block.note_block")) {
+    @Inject(
+            method = "playSound(DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FFZJ)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void makeNoteBlockSoundsOmnidirectional(
+            double x, double y, double z,
+            SoundEvent event, SoundCategory category,
+            float volume, float pitch,
+            boolean useDistance, long seed,
+            CallbackInfo ci
+    ) {
+        // 使用新版获取 Identifier
+        if (
+                ((Main.config.omnidirectionalNoteBlockSounds && Main.SONG_PLAYER.running) || Main.PREVIEWER.running)
+                        && Registries.SOUND_EVENT.getId(event).getPath().startsWith("block.note_block")
+        ) {
             ci.cancel();
-            client.getSoundManager().play(new PositionedSoundInstance(event.getId(), category, volume, pitch, Random.create(seed), false, 0, SoundInstance.AttenuationType.NONE, 0, 0, 0, true));
+            client.getSoundManager().play(
+                    new PositionedSoundInstance(
+                            Registries.SOUND_EVENT.getId(event), // 取 Identifier
+                            category, volume, pitch, Random.create(seed), false, 0,
+                            SoundInstance.AttenuationType.NONE, 0, 0, 0, true
+                    )
+            );
         }
     }
 }

@@ -9,6 +9,10 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import semmiedev.disc_jockey.Main;
 import semmiedev.disc_jockey.Song;
+import net.minecraft.text.Text;
+import net.minecraft.client.render.RenderLayer;
+
+import java.util.function.Function;
 
 public class SongListWidget extends EntryListWidget<SongListWidget.SongEntry> {
 
@@ -60,17 +64,33 @@ public class SongListWidget extends EntryListWidget<SongListWidget.SongEntry> {
 
         @Override
         public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            this.x = x; this.y = y; this.entryWidth = entryWidth; this.entryHeight = entryHeight;
+            this.x = x;
+            this.y = y;
+            this.entryWidth = entryWidth;
+            this.entryHeight = entryHeight;
 
+            // 选中效果
             if (selected) {
-                context.fill(x, y, x + entryWidth, y + entryHeight, 0xFFFFFF);
-                context.fill(x + 1, y + 1, x + entryWidth - 1, y + entryHeight - 1, 0x000000);
+                context.fill(x, y, x + entryWidth, y + entryHeight, 0xFFFFFFFF);
+                context.fill(x + 1, y + 1, x + entryWidth - 1, y + entryHeight - 1, 0xFF000000);
             }
 
-            context.drawCenteredTextWithShadow(client.textRenderer, song.displayName, x + entryWidth / 2, y + 5, selected ? 0xFFFFFF : 0x808080);
+            // 文字渲染
+            context.drawCenteredTextWithShadow(
+                    client.textRenderer,
+                    Text.literal(song.displayName), // 需要Text对象
+                    x + entryWidth / 2,
+                    y + 5,
+                    selected ? 0xFFFFFFFF : 0xFF808080
+            );
 
-            RenderSystem.setShaderTexture(0, ICONS);
-            context.drawTexture(ICONS, x + 2, y + 2, (favorite ? 26 : 0) + (isOverFavoriteButton(mouseX, mouseY) ? 13 : 0), 0, 13, 12, 52, 12);
+            // 图标渲染
+            int u = (favorite ? 26 : 0) + (isOverFavoriteButton(mouseX, mouseY) ? 13 : 0);
+            int v = 0;
+            int width = 13, height = 12;
+
+            // u, v, width, height 按你的需要赋值，texture宽高为52, 12
+            context.drawTexture((Function<Identifier, RenderLayer>) id -> RenderLayer.getGui(), ICONS, x, y, 0.0f, (float)u, (int) v, width, height, 52, 12);
         }
 
         @Override
